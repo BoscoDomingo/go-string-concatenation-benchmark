@@ -7,8 +7,6 @@ import (
 	"testing"
 )
 
-// Run with go test -bench=. -benchmem
-
 var result string
 
 func BenchmarkConcatStrings_Plus(b *testing.B) {
@@ -37,6 +35,15 @@ func BenchmarkConcatStrings_StringsBuilder(b *testing.B) {
 		sb.WriteString(a)
 		sb.WriteString(c)
 		r = sb.String()
+	}
+	result = r
+}
+
+func BenchmarkConcatStrings_Join(b *testing.B) {
+	var r string
+	a, c := "foo", "bar"
+	for i := 0; i < b.N; i++ {
+		r = strings.Join([]string{a, c}, "")
 	}
 	result = r
 }
@@ -70,6 +77,16 @@ func BenchmarkConcatStringAndInt_StringsBuilder(b *testing.B) {
 		sb.WriteString(a)
 		sb.WriteString(strconv.Itoa(n))
 		r = sb.String()
+	}
+	result = r
+}
+
+func BenchmarkConcatStringAndInt_Join(b *testing.B) {
+	var r string
+	a := "foo"
+	n := 42
+	for i := 0; i < b.N; i++ {
+		r = strings.Join([]string{a, strconv.Itoa(n)}, "")
 	}
 	result = r
 }
